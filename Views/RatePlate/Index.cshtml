@@ -1,0 +1,65 @@
+﻿@model RateThePlate.Models.FeedbackViewModel
+
+@{
+    ViewData["Title"] = "Rate The Plate";
+}
+<div id="homeImage">
+    <img class="titlePicture" src="~/images/Icons/RateThePlatePNG.png"
+         onmouseover="this.src='/images/Icons/DontBeToHarsh.png'"
+         onmouseout="this.src='/images/Icons/RateThePlatePNG.png'" />
+</div>
+
+@if (ViewBag.Success != null)
+{
+    <div class=" alert alert-success">
+        <strong>@ViewBag.Success</strong>
+    </div>}
+<div class="row">
+    <div class="uploadImageForm">
+        <div class="col-md-12">
+            @* Uploading image *@
+            <form asp-action="UploadImage" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label id="myText">Please select an image with the Plate number: </label>
+                        <input type="file" name="file" id="file" class="form-control" style="width:auto; max-width:500px" required>
+                        <p class="help-block">*Images must be up to 4 megabytes and greater than 50x50</p>
+                    </div>
+                    <div class="form-group">
+                        <input if="btnLoad" type="submit" value="Upload" class="btn btn-primary" />
+                        @* if carplate is null show error message *@
+                        <label id="error" style="color:red">@ViewData["Error"] </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* If carplate number is not null show image, badge and add to db button *@
+@if (ViewBag.PlateNumber != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Original Image</h4>
+            <img src="@ViewData["originalImage"]" class="img-responsive" alt="Responsive image" />
+        </div>
+        <div class="col-md-4" s>
+            <h4>Introduce your feedback</h4>
+            <div>
+                <label class="control-label">Plate Number :</label>
+                <label class="plateNumberResult">@ViewBag.PlateNumber</label>
+            </div>
+            <form asp-action="SubmitFeedback">
+                <input type="hidden" asp-for="PlateNumber" value="@ViewBag.PlateNumber" />
+                <div class="form-group">
+                    <label asp-for="BadgeId" class="control-label"> Select Badge: </label>
+                    <select asp-for="BadgeId" class="form-control" asp-items="ViewBag.Badges"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Rate" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}

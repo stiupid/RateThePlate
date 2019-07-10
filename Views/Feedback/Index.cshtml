@@ -1,0 +1,131 @@
+﻿@model IEnumerable<RateThePlate.Models.BadgeCountViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    int counter = 0;
+    //showing or not showing badge count before search in index
+    if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            counter = item.Count;
+        }
+    }
+}
+<link rel="stylesheet" type="text/css" href="/CSS/site.css">
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Feedback" asp-action="Search">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label>Car plate number:</label>
+                    <input class="form-control" type="text" placeholder="CJ01AAA" onfocus="this.placeholder=''" onblur="this.placeholder='CJ01AAA'" name="SearchString" style="width:auto; max-width:500px" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Search" class="btn-primary btn"/>
+                    <h5 id="error" style="color:red">@ViewData["Error"] </h5>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group">
+        <table class="table">
+            <thead>
+                @if (string.IsNullOrEmpty(Convert.ToString(ViewData["Error"])))
+                {
+                <tr>
+                    <th>
+                        CarPlate
+                    </th>
+                    @if (counter != 0)
+                    {
+                        <th>
+                            Badge
+                        </th>
+
+                        <th>
+                            Badge Count
+                        </th>
+                        <th>
+                            Reactions
+                        </th>
+                    }
+
+                    <th>
+                        Created
+                    </th>
+
+                </tr>
+                }
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Feedback.CarPlate.PlateNumber)
+                    </td>
+                    @if (item.Count != 0)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Feedback.Badge.Rating)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Count)
+                        </td>
+                    
+                    @*getting icon *@
+                    <td align="center">
+                        @switch (item.Feedback.BadgeId)
+                        {
+                            case 1:
+                                <img id="picture" src="~/images/icons/monkey.png" />
+                                break;
+                            case 2:
+                                <img id="picture" src="~/images/icons/bear.png" />
+                                break;
+                            case 3:
+                                <img id="picture" src="~/images/icons/bee.png" />
+                                break;
+                            case 4:
+                                <img id="picture" src="~/images/icons/cat.png" />
+                                break;
+                            case 5:
+                                <img id="picture" src="~/images/icons/dog.png" />
+                                break;
+                            case 6:
+                                <img id="picture" src="~/images/icons/dragon.png" />
+                                break;
+                            case 7:
+                                <img id="picture" src="~/images/icons/monster.png" />
+                                break;
+                            case 8:
+                                <img id="picture" src="~/images/icons/owl.png" />
+                                break;
+                            case 9:
+                                <img id="picture" src="~/images/icons/turtle.png" />
+                                break;
+
+                            default: <img id="picture" src="~/images/icons/flamingo.png" />
+                                break;
+                        }
+                    </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Feedback.Created)
+                    </td>
+
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
